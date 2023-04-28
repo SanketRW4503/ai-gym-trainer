@@ -1,0 +1,9 @@
+streamlit
+opencv-python
+numpy
+threading
+time
+mixer
+playsound
+mediapipe
+math
