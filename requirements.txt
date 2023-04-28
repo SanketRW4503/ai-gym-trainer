@@ -1,9 +1,5 @@
 streamlit
 opencv-python
 numpy
-
-time
 mixer
-
 mediapipe
-math
