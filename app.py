@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer
 import cv2
 import numpy as np
 import threading
@@ -61,12 +60,10 @@ else:
     
    
 
-#while run:
-def callback(frame):
-    #_, img = camera.read()
-    img = frame.to_ndarray(format="bgr24")
-    #img = cv2.resize(img,dsize=(1200,720))
-    #img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+while run:
+    _, img = camera.read()
+    img = cv2.resize(img,dsize=(1200,720))
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = detector.findPose(img, False)
     lmList = detector.findPosition(img, False)
   
@@ -146,9 +143,7 @@ def callback(frame):
     cv2.putText(img, "fps:"+str(int(fps)), (70, 55), cv2.FONT_HERSHEY_PLAIN, 5,
                 (255, 0, 0), 5)
       
-    #stframe.image(img);
-    return av.VideoFrame.from_ndarray(img, format="bgr24")
-#else:  
- #   st.write('')
-webrtc_streamer(key="example", video_frame_callback=callback)
+    stframe.image(img);
+else:  
+   st.write('')
 
