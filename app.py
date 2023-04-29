@@ -36,9 +36,9 @@ option = st.selectbox(
      'Choose Exercise Type',
      ('reps', 'push ups', 'Squat'))
 if option=="reps":
-    camera = cv2.VideoCapture("sample_video/Workout-1.mp4")
+    camera = cv2.VideoCapture(1)
 elif option=="push ups":
-    camera = cv2.VideoCapture("sample_video/pushups.mp4")
+    camera = cv2.VideoCapture(1)
 elif option =="Squat":
    camera = cv2.VideoCapture("sample_video/squat.mp4")
     
