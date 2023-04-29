@@ -12,12 +12,12 @@ from playsound import playsound
 detector = pm.poseDetector()
 count = 0
 dir = 0
-#pTime = 0
+pTime = 0
 delay=4
 count_limit=0;
 
 
-st.title("Ai GYM Trainner")
+st.title("Ai GYM Trainer")
 
 music = st.file_uploader("Add Music to your Excercise")
 try :
@@ -38,9 +38,9 @@ option = st.selectbox(
 if option=="reps":
     camera = cv2.VideoCapture(1)
 elif option=="push ups":
-    camera = cv2.VideoCapture("pushups.mp4")
+    camera = cv2.VideoCapture("sample_video/pushups.mp4")
 elif option =="Squat":
-   camera = cv2.VideoCapture("squat.mp4")
+   camera = cv2.VideoCapture("sample_video/squat.mp4")
     
 
 count_limit= st.text_input("You Can add limit to your "+option+" count (optional)");
@@ -51,7 +51,7 @@ run = st.checkbox('Start Exercise')
 
 mixer.init()
 if run:
-    playsound("welcome.mp3")
+    playsound("Music/welcome.mp3")
     count=0;
     if music:
         mixer.music.play()
@@ -78,9 +78,9 @@ while run:
             angle = detector.findAngle(img, 11, 13, 15)
             value1,value2=detector.windowPos(img,12);
             if int(value1)<140:
-                playsound("left.mp3")
+                playsound("Music/left.mp3")
             if int(value1)>910:
-                playsound("right.mp3")
+                playsound("Music/right.mp3")
             per = np.interp(angle, (210, 310), (0, 100))
             bar = np.interp(angle, (220, 310), (650, 100))
         elif option =="push ups":
@@ -119,10 +119,10 @@ while run:
 
         print(count)
         if count!=0:
-            if int(count)>=int(count_limit):
+            if int(float(count))>=int(float(count_limit)):
                 cv2.putText(img, 'COUNT COMPLETED !', (200, 300), cv2.FONT_HERSHEY_PLAIN, 4,
                             color, 4)
-                playsound('countcom.mp3')
+                playsound('Music/countcom.mp3')
             
         # Draw Bar
         cv2.rectangle(img, (1100, 100), (1175, 650), color, 3)
@@ -135,13 +135,13 @@ while run:
         cv2.putText(img, str(int(count)), (45, 670), cv2.FONT_HERSHEY_PLAIN, 15,
                             (255, 0, 0), 25)
     else:
-        playsound("wrongcam.mp3")
+        playsound("Music/wrongcam.mp3")
 
-#    cTime = time.time()
- #   fps = 1 / (cTime - pTime)
-  #  pTime = cTime
-  #  cv2.putText(img, "fps:"+str(int(fps)), (70, 55), cv2.FONT_HERSHEY_PLAIN, 5,
-    #            (255, 0, 0), 5)
+    cTime = time.time()
+    fps = 1 / (cTime - pTime)
+    pTime = cTime
+    cv2.putText(img, "fps:"+str(int(fps)), (70, 55), cv2.FONT_HERSHEY_PLAIN, 5,
+                (255, 0, 0), 5)
       
     #FRAME_WINDOW.image(img)
     stframe.image(img);
