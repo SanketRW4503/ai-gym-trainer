@@ -3,3 +3,4 @@ numpy
 mixer
 mediapipe
 gTTS
+webrtc_streamer
