@@ -69,6 +69,12 @@ class poseDetector():
                         cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 255), 2)
         return angle
 
+    def windowPos(self,img,p1):
+        x1, y1 = self.lmList[p1][1:]
+        return x1,y1;
+
+        
+
 def main():
     cap = cv2.VideoCapture('Workout-1.mp4')
     pTime = 0

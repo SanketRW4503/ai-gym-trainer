@@ -11,14 +11,13 @@ from playsound import playsound
 
 detector = pm.poseDetector()
 count = 0
-oldcount=0
 dir = 0
-pTime = 0
+#pTime = 0
 delay=4
-t1 = gtts.gTTS("i am not able to detect your body position, please re-adjust your camera angle !")
+count_limit=0;
 
 
-st.title("Ai Fitness Trainner")
+st.title("Ai GYM Trainner")
 
 music = st.file_uploader("Add Music to your Excercise")
 try :
@@ -29,22 +28,36 @@ except Exception:
 
 
 
-FRAME_WINDOW = st.image([])
-camera = cv2.VideoCapture("Workout-1.mp4")
+
+
+stframe= st.empty()
+
 option = st.selectbox(
      'Choose Exercise Type',
-     ('curls', 'push ups', 'Squat'))
-st.write('You selected:', option)
+     ('reps', 'push ups', 'Squat'))
+if option=="reps":
+    camera = cv2.VideoCapture(1)
+elif option=="push ups":
+    camera = cv2.VideoCapture("pushups.mp4")
+elif option =="Squat":
+   camera = cv2.VideoCapture("squat.mp4")
+    
+
+count_limit= st.text_input("You Can add limit to your "+option+" count (optional)");
+
+
 run = st.checkbox('Start Exercise')
+
 
 mixer.init()
 if run:
     playsound("welcome.mp3")
+    count=0;
     if music:
         mixer.music.play()
 else:
     mixer.music.stop()
-
+    
    
 
 while run:
@@ -55,14 +68,19 @@ while run:
     img = detector.findPose(img, False)
     lmList = detector.findPosition(img, False)
   
-    # print(lmList)
+  
     if len(lmList) != 0:
-        if option =="curls":
+        if option =="reps":
             # Right Arm
             angle = detector.findAngle(img, 12, 14, 16)
+            
             # # Left Arm
             angle = detector.findAngle(img, 11, 13, 15)
-            
+            value1,value2=detector.windowPos(img,12);
+            if int(value1)<140:
+                playsound("left.mp3")
+            if int(value1)>910:
+                playsound("right.mp3")
             per = np.interp(angle, (210, 310), (0, 100))
             bar = np.interp(angle, (220, 310), (650, 100))
         elif option =="push ups":
@@ -100,29 +118,33 @@ while run:
                 dir = 0
 
         print(count)
-        
+        if count!=0:
+            if int(count)>=int(count_limit):
+                cv2.putText(img, 'COUNT COMPLETED !', (200, 300), cv2.FONT_HERSHEY_PLAIN, 4,
+                            color, 4)
+                playsound('countcom.mp3')
+            
         # Draw Bar
         cv2.rectangle(img, (1100, 100), (1175, 650), color, 3)
         cv2.rectangle(img, (1100, int(bar)), (1175, 650), color, cv2.FILLED)
         cv2.putText(img, f'{int(per)} %', (1100, 75), cv2.FONT_HERSHEY_PLAIN, 4,
-                    color, 4)
+                            color, 4)
 
         # Draw Curl Count
         cv2.rectangle(img, (0, 450), (250, 720), (0, 255, 0), cv2.FILLED)
         cv2.putText(img, str(int(count)), (45, 670), cv2.FONT_HERSHEY_PLAIN, 15,
-                    (255, 0, 0), 25)
+                            (255, 0, 0), 25)
     else:
         playsound("wrongcam.mp3")
 
-    cTime = time.time()
-    fps = 1 / (cTime - pTime)
-    pTime = cTime
-    cv2.putText(img, "fps:"+str(int(fps)), (70, 55), cv2.FONT_HERSHEY_PLAIN, 5,
-                (255, 0, 0), 5)
-
-       
-    FRAME_WINDOW.image(img)
-   
+#    cTime = time.time()
+ #   fps = 1 / (cTime - pTime)
+  #  pTime = cTime
+  #  cv2.putText(img, "fps:"+str(int(fps)), (70, 55), cv2.FONT_HERSHEY_PLAIN, 5,
+    #            (255, 0, 0), 5)
+      
+    #FRAME_WINDOW.image(img)
+    stframe.image(img);
     
 else:  
     st.write('')
