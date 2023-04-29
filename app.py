@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_webrtc import webrtc_streamer
 import cv2
 import numpy as np
 import threading
@@ -12,7 +13,7 @@ from playsound import playsound
 detector = pm.poseDetector()
 count = 0
 dir = 0
-# pTime = 0
+pTime = 0
 delay=4
 count_limit=0
 
@@ -60,11 +61,12 @@ else:
     
    
 
-while run:
-
-    _, img = camera.read()
-    img = cv2.resize(img,dsize=(1200,720))
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+#while run:
+def callback(frame):
+    #_, img = camera.read()
+    img = frame.to_ndarray(format="bgr24")
+    #img = cv2.resize(img,dsize=(1200,720))
+    #img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = detector.findPose(img, False)
     lmList = detector.findPosition(img, False)
   
@@ -137,15 +139,16 @@ while run:
     else:
         playsound("audio/wrongcam.mp3")
 
-    # cTime = time.time()
-    # fps = 1 / (cTime - pTime)
-    # pTime = cTime
-    # cv2.putText(img, "fps:"+str(int(fps)), (70, 55), cv2.FONT_HERSHEY_PLAIN, 5,
-    #             (255, 0, 0), 5)
+    cTime = time.time()
+    print("cur time "+str(int(cTime)));
+    fps = 1 / (cTime - pTime)
+    pTime = cTime
+    cv2.putText(img, "fps:"+str(int(fps)), (70, 55), cv2.FONT_HERSHEY_PLAIN, 5,
+                (255, 0, 0), 5)
       
-    #FRAME_WINDOW.image(img)
-    stframe.image(img);
-    
-else:  
-    st.write('')
+    #stframe.image(img);
+    return av.VideoFrame.from_ndarray(img, format="bgr24")
+#else:  
+ #   st.write('')
+webrtc_streamer(key="example", video_frame_callback=callback)
 
