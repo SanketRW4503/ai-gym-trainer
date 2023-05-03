@@ -12,7 +12,7 @@ detector = pm.poseDetector()
 count = 0
 dir = 0
 pTime = 0
-delay=4
+#delay=4
 count_limit=0
 
 
