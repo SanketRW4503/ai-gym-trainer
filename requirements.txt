@@ -1,6 +1,0 @@
-opencv-python
-numpy
-mixer
-mediapipe
-gTTS
-streamlit_webrtc

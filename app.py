@@ -1,11 +1,10 @@
 import streamlit as st
 import cv2
 import numpy as np
-import threading
+#import threading
 import time
 import PoseModule as pm
-from pygame import mixer
-import gtts  
+#from pygame import mixer
 from playsound import playsound
 
 
@@ -19,11 +18,11 @@ count_limit=0
 
 st.title("Ai GYM Trainer")
 
-music = st.file_uploader("Add Music to your Excercise")
-try :
-    mixer.music.load(music)
-except Exception:
-    st.write("Music Status : Not added")
+#music = st.file_uploader("Add Music to your Excercise")
+#try :
+#    mixer.music.load(music)
+#except Exception:
+#    st.write("Music Status : Not added")
 
 
 
@@ -35,13 +34,8 @@ stframe= st.empty()
 option = st.selectbox(
      'Choose Exercise Type',
      ('reps', 'push ups', 'Squat'))
-if option=="reps":
-    camera = cv2.VideoCapture(1)
-elif option=="push ups":
-    camera = cv2.VideoCapture(1)
-elif option =="Squat":
-   camera = cv2.VideoCapture("sample_video/squat.mp4")
-    
+camera = cv2.VideoCapture(1)
+
 
 count_limit= st.text_input("You Can add limit to your "+option+" count (optional)")
 
@@ -49,14 +43,14 @@ count_limit= st.text_input("You Can add limit to your "+option+" count (optional
 run = st.checkbox('Start Exercise')
 
 
-mixer.init()
+#mixer.init()
 if run:
     playsound("audio/welcome.mp3")
     count=0;
-    if music:
-        mixer.music.play()
-else:
-    mixer.music.stop()
+#    if music:
+#        mixer.music.play()
+#else:
+#    mixer.music.stop()
     
    
 
@@ -85,7 +79,7 @@ while run:
         elif option =="push ups":
             # Right Arm
             angle = detector.findAngle(img, 12, 14, 16)
-            # # Left Arm
+            # Left Arm
             angle = detector.findAngle(img, 11, 13, 15)
 
             # print(angle, per)
@@ -116,7 +110,7 @@ while run:
                 count += 0.5
                 dir = 0
 
-        print(count)
+      
         if count!=0:
             if int(float(int(count)))>=int(float(int(count_limit))):
                 cv2.putText(img, 'COUNT COMPLETED !', (200, 300), cv2.FONT_HERSHEY_PLAIN, 4,
@@ -137,7 +131,6 @@ while run:
         playsound("audio/wrongcam.mp3")
 
     cTime = time.time()
-    print("cur time "+str(int(cTime)));
     fps = 1 / (cTime - pTime)
     pTime = cTime
     cv2.putText(img, "fps:"+str(int(fps)), (70, 55), cv2.FONT_HERSHEY_PLAIN, 5,
