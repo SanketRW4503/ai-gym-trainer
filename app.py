@@ -12,17 +12,17 @@ detector = pm.poseDetector()
 count = 0
 dir = 0
 pTime = 0
-#delay=4
+
 count_limit=0
 
 
 st.title("Ai GYM Trainer")
 
-#music = st.file_uploader("Add Music to your Excercise")
+music = st.file_uploader("Add Music to your Excercise")
 #try :
 #    mixer.music.load(music)
 #except Exception:
-#    st.write("Music Status : Not added")
+ #   st.write("Music Status : Not added")
 
 
 
@@ -45,12 +45,15 @@ run = st.checkbox('Start Exercise')
 
 #mixer.init()
 if run:
+    
+
     playsound("audio/welcome.mp3")
     count=0;
-#    if music:
-#        mixer.music.play()
+    if music:
+        st.audio(str(music.name))
+        #mixer.music.play()
 #else:
-#    mixer.music.stop()
+    #mixer.music.stop()
     
    
 
